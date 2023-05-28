@@ -1,0 +1,11 @@
+@import 'proximaNova/stylesheet';
+
+@mixin font($fz, $fw, $lh) {
+  font-size: $fz;
+  font-weight: $fw;
+  line-height: $lh;
+}
+
+@mixin regular-font {
+  @include font(16px, 400, 20px)
+}

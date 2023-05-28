@@ -1,0 +1,30 @@
+@import "../../shared/scss/fonts";
+
+.input {
+  @include regular-font();
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  padding: 16px;
+  cursor: pointer;
+  color: var(--gray-2);
+  background: var(--gray-1);
+  width: 100%;
+  border: none;
+  outline: none;
+  border-radius: 2px;
+
+  &::placeholder {
+    color: var(--gray-2);
+    opacity: 1; /* for Firefox */
+  }
+
+  &:-ms-input-placeholder {
+    color: var(--gray-2);
+  }
+
+  &::-ms-input-placeholder {
+    color: var(--gray-2);
+  }
+}

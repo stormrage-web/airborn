@@ -1,0 +1,27 @@
+.filters {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 46px;
+
+  &>div {
+    width: 25%;
+
+    &:not(:last-child) {
+      margin-right: 20px;
+    }
+  }
+
+  &__selectTitle {
+    font-size: 18px;
+    line-height: 20px;
+    margin-top: 0;
+    margin-bottom: 7px;
+  }
+}
+
+.noData {
+  width: 100%;
+  text-align: center;
+  padding: 40px 0;
+  background-color: var(--blue-2);
+}

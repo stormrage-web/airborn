@@ -1,0 +1,22 @@
+@import "../../../shared/scss/fonts";
+
+.option {
+  @include regular-font();
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 48px;
+  padding: 16px;
+  border: 1px;
+  cursor: pointer;
+  background-color: var(--gray-1);
+  color: var(--total-black);
+
+  &:hover {
+    background-color: var(--blue-1);
+  }
+
+  &[aria-selected="true"] {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}

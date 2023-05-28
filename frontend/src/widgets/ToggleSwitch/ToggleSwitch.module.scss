@@ -1,0 +1,25 @@
+.wrapper {
+  background-color: var(--gray-1);
+  padding: 14px 0;
+  border-radius: 4px;
+  display: inline-block
+}
+
+.wrapper [name="pricing"] {
+  display: none
+}
+
+.wrapper input[type="radio"]+label {
+  background-color: var(--gray-1);
+  color: var(--total-black);
+  padding: 14px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wrapper input[type="radio"]:checked+label {
+  color: var(--snowy);
+  background-color: var(--blue-5);
+  font-weight: 600;
+}

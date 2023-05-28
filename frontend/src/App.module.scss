@@ -1,0 +1,14 @@
+@import "shared/scss/colors";
+@import "shared/scss/fonts";
+
+.wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  padding: 15vh 5vw 5vh 5vw;
+  background-color: var(--blue-3);
+}
+
+.tabsBlock {
+  width: 100%;
+  background-color: var(--snowy);
+}

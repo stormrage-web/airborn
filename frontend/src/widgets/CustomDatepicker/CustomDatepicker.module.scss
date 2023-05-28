@@ -1,0 +1,29 @@
+.item {
+  position: relative;
+
+  &:before {
+    display: inline-block;
+    position: absolute;
+    top: 6px;
+    right: 0;
+    z-index: 10;
+    padding: 0 14px 0 0;
+    content: "";
+    height: 32px;
+    width: 32px;
+    background: url("../../shared/images/calendar.svg") no-repeat;
+  }
+}
+
+.input {
+  position: relative;
+  height: 48px;
+  width: 100%;
+  border-radius: 4px;
+  padding: 12px 14px;
+  outline: none;
+  border: none;
+  background-color: var(--gray-1);
+  cursor: pointer;
+  caret-color: transparent;
+}

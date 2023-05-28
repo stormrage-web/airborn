@@ -1,0 +1,120 @@
+.tabWrapper {
+  display: inline-block;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: var(--snowy);
+}
+
+.wrapper {
+  height: 100%;
+  padding: 32px 26px;
+}
+
+.header {
+  &__title {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 22px;
+    margin: 0;
+  }
+
+  &__destination {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 16px;
+    color: var(--gray-2);
+    margin: 0;
+  }
+}
+
+
+.dates {
+  display: flex;
+  margin-top: 16px;
+
+  &>:first-child {
+    margin-right: 20px;
+  }
+
+  &>.react-datepicker-wrapper {
+    width: 50%;
+  }
+}
+
+.breadcrumbs {
+  position: absolute;
+  top: -80px;
+  left: 0;
+  color: var(--snowy);
+
+  &:visited {
+    color: var(--snowy);
+  }
+  &:link {
+    color: var(--snowy);
+  }
+  &:active {
+    color: var(--snowy);
+  }
+  &:hover {
+    color: var(--snowy);
+  }
+}
+
+.navigation {
+  position: absolute;
+  top: -39px;
+  height: 40px;
+
+  &__tab {
+    display: inline-block;
+    position: relative;
+    padding: 10px 33px 10px 26px;
+    background-color: var(--blue-4);
+    overflow: hidden;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: -34px;
+      background-color: var(--blue-3);
+      width: 72px;
+      height: 24px;
+      transform: rotate(60deg);
+    }
+
+    &:visited {
+      color: var(--snowy);
+    }
+    &:link {
+      color: var(--snowy);
+    }
+    &:active {
+      color: var(--snowy);
+    }
+    &:hover {
+      color: var(--snowy);
+    }
+
+    &_active {
+      background-color: var(--snowy);
+      color: var(--total-black);
+      font-weight: 600;
+
+      &:visited {
+        color: var(--total-black);
+      }
+      &:link {
+        color: var(--total-black);
+      }
+      &:active {
+        color: var(--total-black);
+      }
+      &:hover {
+        color: var(--total-black);
+      }
+    }
+  }
+}
