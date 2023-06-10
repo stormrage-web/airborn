@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React  from "react";
 import styles from "./CustomCheckbox.module.scss";
 
 const CustomCheckbox: React.FC<{ children: string, color?: string, active: boolean, setActive: (x: boolean) => void }> = ({ children, color, active, setActive }) => {

@@ -30,6 +30,7 @@ const CustomDatepicker = ({
 				<ReactDatePickerInput className={styles.input} />
 			}
 			onChange={(date: Date | null) => setDate(date)}
+			includeDates={[new Date()]}
 			wrapperClassName={styles.item}
 		/>
 	);

@@ -1,0 +1,35 @@
+.filters {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 46px;
+
+  &>div {
+    width: 50%;
+
+    &:not(:last-child) {
+      width: 30%;
+      margin-right: 20px;
+    }
+  }
+
+  &__selectTitle {
+    font-size: 18px;
+    line-height: 20px;
+    margin-top: 0;
+    margin-bottom: 7px;
+  }
+
+  &__checkboxesWrapper {
+    display: grid;
+    width: 100%;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.noData {
+  width: 100%;
+  text-align: center;
+  padding: 40px 0;
+  background-color: var(--blue-2);
+}

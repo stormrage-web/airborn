@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "./TaskTwo.module.scss";
 import { CustomSelect } from "../../../widgets/CustomSelect/CustomSelect";
 import {
@@ -9,45 +9,36 @@ import {
 	ResponsiveContainer,
 	Tooltip,
 	XAxis,
-	YAxis,
+	YAxis
 } from "recharts";
 import { Option } from "../../../widgets/CustomSelect/CustomOption/CustomOption";
 import ToggleSwitch from "../../../widgets/ToggleSwitch/ToggleSwitch";
-import axios from "axios";
+import { TabOneData } from "../../../models/flights.interface";
+import { useTaskTwoLogic } from "./TaskTwo.logic";
 
 interface TaskTwoProps {
-	classes: Option[];
-	flight: string;
+  classes: Option[];
+  flight: string;
 }
 
-const TaskTwo = ({classes, flight}: TaskTwoProps) => {
-	const [seasons, setSeasons] = useState<any[]>([]);
-	const [data, setData] = useState([]);
-	const [selectedClass, setSelectedClass] = useState<string | null>(null);
-	const [isSeasonTypeActive, setIsSeasonTypeActive] = useState(true);
-	const selectedValue =
-		classes.find((item) => item.value === selectedClass) || null;
-
-	const handleTypeChange = (x: boolean) => setIsSeasonTypeActive(x);
+const TaskTwo = ({ classes, flight }: TaskTwoProps) => {
+	const {
+		fetchFlightHandler,
+		handleChangeType,
+		handleChangeClass,
+		mx,
+		tabParams,
+		tabInfo
+	} = useTaskTwoLogic({ flight });
 
 	useEffect(() => {
-		axios
-			.get(
-				"http://91.227.18.29:5000/flight_task_2?flight_id_param=1125&flight_date_param=04.03.2019&booking_class_param=J&plot_type_param=dynamic",
-			)
-			.then((response) => {
-				setData(response.data?.data);
-				const responseSeasons = response.data?.seasons;
-				const iteratedSeasons = [];
-				for (const key of Object.keys(responseSeasons)) {
-					iteratedSeasons.push({
-						name: key,
-						startIndex: responseSeasons[key]?.left,
-						endIndex: responseSeasons[key]?.right,
-					});
-				}
-				setSeasons(iteratedSeasons);
-			});
+		fetchFlightHandler({
+			tab: 2,
+			data: {
+				flight: flight,
+				tabParams: { class: classes[0].title, type: 0 }
+			}
+		});
 	}, []);
 
 	return (
@@ -55,12 +46,21 @@ const TaskTwo = ({classes, flight}: TaskTwoProps) => {
 			<div className={styles.filters}>
 				<div>
 					<p className={styles.filters__selectTitle}>
-						Класс бронирования
+            Класс бронирования
 					</p>
 					<CustomSelect
-						selected={selectedValue}
+						selected={
+							classes.find(
+								(item) => item.title === tabParams.class
+							) || null
+						}
 						options={classes}
-						onChange={(e) => setSelectedClass(e)}
+						onChange={(e) =>
+							handleChangeClass(
+								classes.find((item) => item.value === e)
+									?.title || ""
+							)
+						}
 					/>
 				</div>
 				<div>
@@ -68,50 +68,61 @@ const TaskTwo = ({classes, flight}: TaskTwoProps) => {
 					<ToggleSwitch
 						leftLabel={"Сезонность\xa0спроса"}
 						rightLabel={"Изменение\xa0бронирования"}
-						leftActive={isSeasonTypeActive}
-						onChange={handleTypeChange}
+						leftActive={tabParams.type === 0}
+						onChange={handleChangeType}
 					/>
 				</div>
 			</div>
-			<ResponsiveContainer width="100%" height={300}>
-				<AreaChart data={data}>
-					<XAxis dataKey="x" stroke="#4082F4" />
-					<YAxis dataKey="y" />
-					{seasons.map((season) => (
-						<ReferenceArea
-							key={season.name}
-							x1={season.startIndex}
-							x2={season.endIndex}
-							y1={0}
-							y2={45}
-							fill={Math.floor(Math.random()*16777215).toString(16)}
-							fillOpacity={0.8}
-							label={season.name}
+			{!(tabInfo as TabOneData)?.seasons?.length ? (
+				<div className={styles.noData}>
+          Нет данных для рейса с заданными параметрами
+				</div>
+			) : (
+				<ResponsiveContainer width="100%" height={300}>
+					<AreaChart data={(tabInfo as TabOneData).data}>
+						<XAxis dataKey="x" stroke="#4082F4" />
+						<YAxis dataKey="y" />
+						{((tabInfo as TabOneData)?.seasons || []).map((season) => (
+							<>
+								<ReferenceArea
+									key={season.name}
+									x1={season.left}
+									x2={season.right}
+									y1={0}
+									y2={(Math.random() * (1.1 - 0.3) + 0.3) * mx}
+									fill={"#" + Math.floor(
+										Math.random() * 16777215
+									).toString(16)}
+									fillOpacity={0.3}
+									label={season.name}
+								/>
+                asd
+							</>
+						))}
+						<Tooltip />
+						<Area
+							type="monotone"
+							dataKey="y"
+							stroke="#4082F4"
+							fill="#4082F4"
+							fillOpacity={0.5}
+							activeDot={{ r: 8 }}
 						/>
-					))}
-					<Tooltip />
-					<Area
-						type="monotone"
-						dataKey="y"
-						stroke="#4082F4"
-						fill="#4082F4"
-						fillOpacity={0.5}
-						activeDot={{ r: 8 }}
-					/>
-					<Brush dataKey="date" height={40} stroke="#4082F4">
-						<AreaChart data={data}>
-							<Area
-								type="monotone"
-								dataKey="y"
-								fill="#CADFF5"
-								fillOpacity={1}
-								strokeOpacity={0}
-								activeDot={{ r: 8 }}
-							/>
-						</AreaChart>
-					</Brush>
-				</AreaChart>
-			</ResponsiveContainer>
+						<Brush dataKey="date" height={40} stroke="#4082F4">
+							<AreaChart data={(tabInfo as TabOneData).data}>
+								<Area
+									type="monotone"
+									dataKey="y"
+									fill="#CADFF5"
+									fillOpacity={1}
+									strokeOpacity={0}
+									activeDot={{ r: 8 }}
+								/>
+							</AreaChart>
+						</Brush>
+					</AreaChart>
+				</ResponsiveContainer>
+			)}
 		</div>
 	);
 };

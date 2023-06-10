@@ -11,7 +11,7 @@ const App = () => {
 	const [flights, setFlights] = useState<Flight[]>(flightsMock);
 
 	useEffect(() => {
-		axios.get<Flight[]>("http://91.227.18.29:5000/all_flights_data").then((response) => {
+		axios.get<Flight[]>("http://51.250.91.130:5000/all_flights_data").then((response) => {
 			setFlights(response.data);
 		});
 	}, []);
@@ -23,7 +23,7 @@ const App = () => {
 					<Routes>
 						<Route path="/" element={<MainTab flights={flights} />} />
 						<Route path="/flight/" element={<FlightsWrapper />}>
-							{flights.map((flight, index) => (
+							{flights.map((flight) => (
 								<Route
 									key={flight.title + flight.time}
 									path={flight.title + flight.time + "/*"}

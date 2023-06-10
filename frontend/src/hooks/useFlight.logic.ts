@@ -1,6 +1,6 @@
 import { useAppDispatch } from "./redux";
 import { fetchFlight, setParams } from "../store/reducers/ActionCreators";
-import { FlightState, TabParams } from "../store/reducers/FlightSlice";
+import { FlightState, TabParams } from "../models/flights.interface";
 
 export const useTabsLogic = () => {
 	const dispatch = useAppDispatch();

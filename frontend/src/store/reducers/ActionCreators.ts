@@ -1,14 +1,14 @@
 import { AppDispatch } from "../store";
 import axios from "axios";
+import { flightSlice } from "./FlightSlice";
 import {
 	Coordinates,
-	flightSlice,
 	FlightState,
 	TabOneData,
 	TabParams,
-} from "./FlightSlice";
+} from "../../models/flights.interface";
 
-export const mainEndPoint = "http://91.227.18.29:5000/";
+export const mainEndPoint = "http://51.250.91.130:5000/";
 
 export const fetchFlight =
 	({ tab, data }: { tab: number; data: Partial<FlightState> }) =>
@@ -22,8 +22,14 @@ export const fetchFlight =
 				const booking_class_param = data.tabParams?.class
 					? "&booking_class_param=" + data.tabParams?.class
 					: "";
+				const start_date = data.tabParams?.start_date
+					? "&start_date=" + data.tabParams?.start_date
+					: "";
+				const prediction_depth = data.tabParams?.prediction_depth
+					? "&prediction_depth=" + data.tabParams?.prediction_depth
+					: "";
 				const profiles_param = data.tabParams?.profiles?.length
-					? data.tabParams.profiles
+					? "&profile_types=" + data.tabParams.profiles
 						.map((profile, index) => {
 							let profileName = "";
 							switch (index) {
@@ -40,54 +46,54 @@ export const fetchFlight =
 								profileName = "Заранее запланированное";
 								break;
 							}
-							return "&profile_types=" + profileName;
-						})
-						.join("")
+							return profile
+								? profileName
+								: "";
+						}).filter((item) => item?.length).join(",")
 					: "";
 				const plot_type_param =
-					data.tabParams?.type === 0
+				tab === 2
+					? "&plot_type_param=season_spros"
+					: data.tabParams?.type === 0
 						? "&plot_type_param=dynamic"
-						: data.tabParams?.type === 1
-							? "&plot_type_param=season_spros"
-							: "";
-				const response = await axios.get<Coordinates[] | TabOneData>(
+						: "";
+				const response = await axios.get<Coordinates[] | TabOneData | any>(
 					mainEndPoint +
-						"flight_task_" +
-						tab +
-						flight_id_param +
-						flight_date_param +
-						booking_class_param +
-						plot_type_param +
-						profiles_param,
+					"flight_task_" +
+					tab +
+					flight_id_param +
+					flight_date_param +
+					booking_class_param +
+					plot_type_param +
+					start_date +
+					prediction_depth +
+					profiles_param,
 				);
-				// if (tab == 2) {
-				// 	const responseSeasons = (response.data as TabOneData).seasons || {};
-				// 	const iteratedSeasons = [];
-				// 	for (const key of Object.keys(responseSeasons)) {
-				// 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// 	// @ts-ignore
-				// 		iteratedSeasons.push({
-				// 			name: key,
-				// 			left: responseSeasons[key]?.left,
-				// 			right: responseSeasons[key]?.right,
-				// 		});
-				// 	}
-
-				// 	dispatch(
-				// 		flightSlice.actions.flightFetchingSuccess({
-				// 			flight: data.flight,
-				// 			tabInfo: response.data,
-				// 			tabParams: data.tabParams,
-				// 		}),
-				// 	);
-				// } else
-				dispatch(
-					flightSlice.actions.flightFetchingSuccess({
-						flight: data.flight,
-						tabInfo: response.data,
-						tabParams: data.tabParams,
-					}),
-				);
+				if (tab == 2) {
+					const responseSeasons = response.data.seasons;
+					const iteratedSeasons = [];
+					for (const key of Object.keys(responseSeasons)) {
+						iteratedSeasons.push({
+							name: key,
+							left: responseSeasons[key]?.left,
+							right: responseSeasons[key]?.right,
+						});
+					}
+					dispatch(
+						flightSlice.actions.flightFetchingSuccess({
+							flight: data.flight,
+							tabInfo: { ...response.data, seasons: iteratedSeasons },
+							tabParams: data.tabParams,
+						}),
+					);
+				} else
+					dispatch(
+						flightSlice.actions.flightFetchingSuccess({
+							flight: data.flight,
+							tabInfo: response.data,
+							tabParams: data.tabParams,
+						}),
+					);
 			} catch (e) {
 				console.log(e);
 			}
